@@ -84,14 +84,13 @@ cd tmp/gcc
 cd -
 fi
 
+# workaroud, compiler needs libgomp.spec to support OpenMP
+install -m 644 hermit/usr/libomp/libgomp.spec $PREFIX/$TARGET/lib
+
 if [ ! -d "tmp/final" ]; then
 mkdir -p tmp/final
 cd tmp/final
 cmake -DTOOLCHAIN_BIN_DIR=$PREFIX/bin -DCMAKE_INSTALL_PREFIX=$PREFIX ../../hermit
-make libiomp
-cp local_prefix/work/hermit/$TARGET/lib/libgomp.spec $PREFIX/$TARGET/lib
-cp local_prefix/work/hermit/$TARGET/lib/*.a $PREFIX/$TARGET/lib
-cp local_prefix/work/hermit/$TARGET/include/*.h $PREFIX/$TARGET/include
 make
 make install
 cd -

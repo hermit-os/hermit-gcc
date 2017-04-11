@@ -5,7 +5,7 @@ To build the toolchain just call the script as follow:
 
 ```bash
 $ . ./local-cmake.sh
-$ . ./bootstrap.sh x86_64-hermit /home/usr/hermit
+$ . ./toolchain.sh x86_64-hermit /home/usr/hermit
 ```
 
 The first argument of the script specifies the target architecture, where the second argument defines the path to the installation directory.

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# script to build HermitCore's bootstrap compiler
+# script to build HermitCore's toolchainr
 #
 # $1 = specifies the target architecture
 # $2 = specifies the installation directory

@@ -43,10 +43,6 @@ cd pte
 ./configure --prefix=$PREFIX
 fi
 
-if [ ! -d "libomp" ]; then
-git clone $CLONE_DEPTH https://github.com/RWTH-OS/libomp_oss.git libomp
-fi
-
 if [ ! -d "tmp/binutils" ]; then
 mkdir -p tmp/binutils
 cd tmp/binutils
@@ -88,19 +84,14 @@ cd tmp/gcc
 cd -
 fi
 
-if [ ! -d "tmp/libomp" ]; then
-mkdir -p tmp/libomp
-cd tmp/libomp
-cmake -DTOOLCHAIN_BIN_DIR=$PREFIX/bin -DCMAKE_INSTALL_PREFIX=$PREFIX/$TARGET -DHERMIT=1 ../../libomp
-make
-make install
-cd -
-fi
-
 if [ ! -d "tmp/final" ]; then
 mkdir -p tmp/final
 cd tmp/final
 cmake -DTOOLCHAIN_BIN_DIR=$PREFIX/bin -DCMAKE_INSTALL_PREFIX=$PREFIX ../../hermit
+make libiomp
+cp local_prefix/work/hermit/$TARGET/lib/libgomp.spec $PREFIX/$TARGET/lib
+cp local_prefix/work/hermit/$TARGET/lib/*.a $PREFIX/$TARGET/lib
+cp local_prefix/work/hermit/$TARGET/include/*.h $PREFIX/$TARGET/include
 make
 make install
 cd -

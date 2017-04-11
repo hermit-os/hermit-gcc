@@ -7,7 +7,7 @@
 
 BUILDDIR=build_toolchain
 CLONE_DEPTH="--depth=50"
-PREFIX="$2"/opt
+PREFIX="$2"/opt/hermit
 TARGET=$1
 NJOBS=-j"$(nproc)"
 PATH=$PATH:$PREFIX/bin
@@ -36,7 +36,7 @@ fi
 if [ ! -d "tmp/bootstrap" ]; then
 mkdir -p tmp/bootstrap
 cd tmp/bootstrap
-../../gcc/configure --target=$TARGET --prefix=$PREFIX --without-headers --disable-multilib --with-isl --enable-languages=c,lto --disable-nls --disable-shared --disable-libssp --disable-libgomp --enable-threads=posix --enable-tls --enable-lto --disable-symvers && make $NJOBS all-gcc && make install-gcc
+../../gcc/configure --target=$TARGET --prefix=$PREFIX --without-headers --disable-multilib --with-isl --enable-languages=c,c++,lto --disable-nls --disable-shared --disable-libssp --disable-libgomp --enable-threads=posix --enable-tls --enable-lto --disable-symvers && make $NJOBS all-gcc && make install-gcc
 cd -
 fi
 

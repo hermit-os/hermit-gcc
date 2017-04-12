@@ -11,6 +11,12 @@ PREFIX="$2"
 TARGET=$1
 NJOBS=-j"$(nproc)"
 PATH=$PATH:$PREFIX/bin
+ARCH_OPT="-mtune=native"
+export CFLAGS_FOR_TARGET="-m64 -O3 -ftree-vectorize $ARCH_OPT"
+export GOFLAGS_FOR_TARGET="-m64 -O3 -ftree-vectorize $ARCH_OPT"
+export FCFLAGS_FOR_TARGET="-m64 -O3 -ftree-vectorize $ARCH_OPT"
+export FFLAGS_FOR_TARGET="-m64 -O3 -ftree-vectorize $ARCH_OPT"
+export CXXFLAGS_FOR_TARGET="-m64 -O3 -ftree-vectorize $ARCH_OPT"
 
 echo "Build bootstrap toolchain for $TARGET with $NJOBS jobs for $PREFIX"
 sleep 1
@@ -90,7 +96,7 @@ install -m 644 hermit/usr/libomp/libgomp.spec $PREFIX/$TARGET/lib
 if [ ! -d "tmp/final" ]; then
 mkdir -p tmp/final
 cd tmp/final
-cmake -DTOOLCHAIN_BIN_DIR=$PREFIX/bin -DCMAKE_INSTALL_PREFIX=$PREFIX ../../hermit
+cmake -DTOOLCHAIN_BIN_DIR=$PREFIX/bin -DCMAKE_INSTALL_PREFIX=$PREFIX -DMTUNE=native ../../hermit
 make
 make install
 cd -

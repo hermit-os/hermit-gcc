@@ -13,7 +13,7 @@ The build process works currently only on **x86-based Linux** systems. The follo
 
 On Debian-based systems the packets can be installed by executing:
 ```
-  sudo apt-get install qemu-system-x86  nasm texinfo libmpfr-dev libmpc-dev libgmp-dev flex bison
+  sudo apt-get install nasm texinfo libmpfr-dev libmpc-dev libgmp-dev flex bison
 ```
 
 We require a fairly recent version of CMake (`3.7`) which is not yet present in

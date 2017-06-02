@@ -36,7 +36,7 @@ mv isl-0.15 gcc/isl
 fi
 
 if [ ! -d "hermit" ]; then
-git clone --recursive -b devel https://github.com/RWTH-OS/HermitCore.git hermit
+git clone --recursive -b master https://github.com/RWTH-OS/HermitCore.git hermit
 fi
 
 if [ ! -d "newlib" ]; then
@@ -47,6 +47,7 @@ if [ ! -d "pte" ]; then
 git clone $CLONE_DEPTH https://github.com/RWTH-OS/pthread-embedded.git pte
 cd pte
 ./configure --prefix=$PREFIX
+cd -
 fi
 
 if [ ! -d "tmp/binutils" ]; then

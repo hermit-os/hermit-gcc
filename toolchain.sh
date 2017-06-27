@@ -9,14 +9,15 @@ BUILDDIR=build
 CLONE_DEPTH="--depth=50"
 PREFIX="$2"
 TARGET=$1
+TARGET_SHORT=${TARGET::-7}
 NJOBS=-j"$(nproc)"
 PATH=$PATH:$PREFIX/bin
-ARCH_OPT="-mtune=native"
-export CFLAGS_FOR_TARGET="-m64 -O3 -ftree-vectorize $ARCH_OPT"
-export GOFLAGS_FOR_TARGET="-m64 -O3 -ftree-vectorize $ARCH_OPT"
-export FCFLAGS_FOR_TARGET="-m64 -O3 -ftree-vectorize $ARCH_OPT"
-export FFLAGS_FOR_TARGET="-m64 -O3 -ftree-vectorize $ARCH_OPT"
-export CXXFLAGS_FOR_TARGET="-m64 -O3 -ftree-vectorize $ARCH_OPT"
+ARCH_OPT= #"-mtune=native"
+export CFLAGS_FOR_TARGET="-O3 -ftree-vectorize $ARCH_OPT"
+export GOFLAGS_FOR_TARGET="-O3 -ftree-vectorize $ARCH_OPT"
+export FCFLAGS_FOR_TARGET="-O3 -ftree-vectorize $ARCH_OPT"
+export FFLAGS_FOR_TARGET="-O3 -ftree-vectorize $ARCH_OPT"
+export CXXFLAGS_FOR_TARGET="-O3 -ftree-vectorize $ARCH_OPT"
 
 echo "Build bootstrap toolchain for $TARGET with $NJOBS jobs for $PREFIX"
 sleep 1
@@ -36,7 +37,7 @@ mv isl-0.15 gcc/isl
 fi
 
 if [ ! -d "hermit" ]; then
-git clone --recursive -b master https://github.com/RWTH-OS/HermitCore.git hermit
+git clone --recursive -b aarch64 https://github.com/RWTH-OS/HermitCore.git hermit
 fi
 
 if [ ! -d "newlib" ]; then
@@ -67,7 +68,7 @@ fi
 if [ ! -d "tmp/hermit" ]; then
 mkdir -p tmp/hermit
 cd tmp/hermit
-cmake -DTOOLCHAIN_BIN_DIR=$PREFIX/bin -DCMAKE_INSTALL_PREFIX=$PREFIX -DBOOTSTRAP=true ../../hermit
+cmake -DHERMIT_ARCH=$TARGET_SHORT -DTOOLCHAIN_BIN_DIR=$PREFIX/bin -DCMAKE_INSTALL_PREFIX=$PREFIX -DBOOTSTRAP=true ../../hermit
 make hermit-bootstrap
 make hermit-bootstrap-install
 cd -
@@ -87,20 +88,20 @@ cd ..
 if [ ! -d "tmp/gcc" ]; then
 mkdir -p tmp/gcc
 cd tmp/gcc
-../../gcc/configure --target=$TARGET --prefix=$PREFIX --with-newlib --with-isl --disable-multilib --without-libatomic --enable-languages=c,c++,go,fortran,lto --disable-nls --disable-shared --disable-libssp --enable-threads=posix --disable-libgomp --enable-tls --enable-lto --disable-symver && make $NJOBS && make install
+../../gcc/configure --target=$TARGET --prefix=$PREFIX --with-newlib --with-isl --disable-multilib --without-libatomic --enable-languages=c,lto --disable-nls --disable-shared --disable-libssp --enable-threads=posix --disable-libgomp --enable-tls --enable-lto --disable-symver && make $NJOBS && make install
 cd -
 fi
 
 # workaroud, compiler needs libgomp.spec to support OpenMP
-install -m 644 hermit/usr/libomp/libgomp.spec $PREFIX/$TARGET/lib
+#install -m 644 hermit/usr/libomp/libgomp.spec $PREFIX/$TARGET/lib
 
-if [ ! -d "tmp/final" ]; then
-mkdir -p tmp/final
-cd tmp/final
-cmake -DTOOLCHAIN_BIN_DIR=$PREFIX/bin -DCMAKE_INSTALL_PREFIX=$PREFIX -DMTUNE=native ../../hermit
-make
-make install
-cd -
-fi
+#if [ ! -d "tmp/final" ]; then
+#mkdir -p tmp/final
+#cd tmp/final
+#cmake -DTOOLCHAIN_BIN_DIR=$PREFIX/bin -DCMAKE_INSTALL_PREFIX=$PREFIX -DMTUNE=native ../../hermit
+#make
+#make install
+#cd -
+#fi
 
 cd ..

@@ -47,7 +47,7 @@ fi
 if [ ! -d "pte" ]; then
 git clone $CLONE_DEPTH https://github.com/RWTH-OS/pthread-embedded.git pte
 cd pte
-./configure --prefix=$PREFIX
+./configure --prefix=$PREFIX --target=$TARGET
 cd -
 fi
 
@@ -77,7 +77,7 @@ fi
 if [ ! -d "tmp/newlib" ]; then
 mkdir -p tmp/newlib
 cd tmp/newlib
-../../newlib/configure --target=$TARGET --prefix=$PREFIX --disable-shared --disable-multilib --enable-lto --enable-newlib-hw-fp --enable-newlib-io-c99-formats --enable-newlib-multithread && make $NJOBS && make install
+../../newlib/configure --target=$TARGET --prefix=$PREFIX --disable-shared --disable-multilib --enable-lto --enable-newlib-hw-fp --enable-newlib-io-c99-formats --enable-newlib-multithread && make $NJOBS all-target-newlib && make install-target-newlib
 cd -
 fi
 

@@ -46,7 +46,7 @@ fi
 if [ ! -d "pte" ]; then
 git clone $CLONE_DEPTH https://github.com/RWTH-OS/pthread-embedded.git pte
 cd pte
-./configure --prefix=$PREFIX
+./configure --target=$TARGET --prefix=$PREFIX
 cd -
 fi
 

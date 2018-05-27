@@ -25,26 +25,26 @@ mkdir -p $BUILDDIR
 cd $BUILDDIR
 
 if [ ! -d "binutils" ]; then
-git clone $CLONE_DEPTH https://github.com/RWTH-OS/binutils.git
+git clone $CLONE_DEPTH https://github.com/hermitcore/binutils.git
 fi
 
 if [ ! -d "gcc" ]; then
-git clone $CLONE_DEPTH https://github.com/RWTH-OS/gcc.git
+git clone $CLONE_DEPTH https://github.com/hermitcore/gcc.git
 wget ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-0.15.tar.bz2 -O isl-0.15.tar.bz2
 tar jxf isl-0.15.tar.bz2
 mv isl-0.15 gcc/isl
 fi
 
 if [ ! -d "hermit" ]; then
-git clone --recursive -b master https://github.com/RWTH-OS/HermitCore.git hermit
+git clone --recursive -b master https://github.com/hermitcore/libhermit.git hermit
 fi
 
 if [ ! -d "newlib" ]; then
-git clone $CLONE_DEPTH https://github.com/RWTH-OS/newlib.git
+git clone $CLONE_DEPTH https://github.com/hermitcore/newlib.git
 fi
 
 if [ ! -d "pte" ]; then
-git clone $CLONE_DEPTH https://github.com/RWTH-OS/pthread-embedded.git pte
+git clone $CLONE_DEPTH https://github.com/hermitcore/pthread-embedded.git pte
 cd pte
 ./configure --target=$TARGET --prefix=$PREFIX
 cd -

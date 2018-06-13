@@ -37,7 +37,7 @@ mv isl-0.15 gcc/isl
 fi
 
 if [ ! -d "hermit" ]; then
-git clone --recursive -b master https://github.com/hermitcore/libhermit.git hermit
+git clone --recursive -b devel https://github.com/hermitcore/libhermit.git hermit
 fi
 
 if [ ! -d "newlib" ]; then
@@ -88,7 +88,7 @@ cd ..
 if [ ! -d "tmp/gcc" ]; then
 mkdir -p tmp/gcc
 cd tmp/gcc
-../../gcc/configure --target=$TARGET --prefix=$PREFIX --with-newlib --with-isl --disable-multilib --without-libatomic --enable-languages=c,lto --disable-nls --disable-shared --disable-libssp --enable-threads=posix --disable-libgomp --enable-tls --enable-lto --disable-symver && make $NJOBS && make install
+../../gcc/configure --target=$TARGET --prefix=$PREFIX --with-newlib --with-isl --disable-multilib --without-libatomic --enable-languages=c,c++,lto --disable-nls --disable-shared --disable-libssp --enable-threads=posix --disable-libgomp --enable-tls --enable-lto --disable-symver && make $NJOBS && make install
 cd -
 fi
 

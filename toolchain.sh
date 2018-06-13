@@ -88,7 +88,7 @@ cd ..
 if [ ! -d "tmp/gcc" ]; then
 mkdir -p tmp/gcc
 cd tmp/gcc
-../../gcc/configure --target=$TARGET --prefix=$PREFIX --with-newlib --with-isl --disable-multilib --without-libatomic --enable-languages=c,c++,lto --disable-nls --disable-shared --disable-libssp --enable-threads=posix --disable-libgomp --enable-tls --enable-lto --disable-symver && make $NJOBS && make install
+../../gcc/configure --target=$TARGET --prefix=$PREFIX --with-newlib --with-isl --disable-multilib --without-libatomic --enable-languages=c,c++,fortran,go,lto --disable-nls --disable-shared --disable-libssp --enable-threads=posix --disable-libgomp --enable-tls --enable-lto --disable-symver && make $NJOBS && make install
 cd -
 fi
 

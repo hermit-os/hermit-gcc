@@ -36,7 +36,7 @@ mv isl-0.15 gcc/isl
 fi
 
 if [ ! -d "hermit" ]; then
-git clone --recursive -b master https://github.com/hermitcore/libhermit.git hermit
+git clone --recursive -b master https://github.com/hermitcore/libhermit-rs.git hermit
 fi
 
 if [ ! -d "newlib" ]; then
@@ -44,7 +44,7 @@ git clone $CLONE_DEPTH https://github.com/hermitcore/newlib.git
 fi
 
 if [ ! -d "pte" ]; then
-git clone $CLONE_DEPTH https://github.com/hermitcore/pthread-embedded.git pte
+git clone $CLONE_DEPTH -b path2rs https://github.com/hermitcore/pthread-embedded.git pte
 cd pte
 ./configure --target=$TARGET --prefix=$PREFIX
 cd -

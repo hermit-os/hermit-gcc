@@ -1,6 +1,6 @@
 # hermit-toolchain
 
-This repository contains scripts to build the HermitCore's cross-compiler, which based on the library OS [HermitCore](http://www.hermitcore.org).
+This repository contains scripts to build the cross-compiler for the Rust-based library OS [HermitCore](https://github.com/hermitcore/libhermit-rs).
 
 ## Requirements
 

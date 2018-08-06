@@ -51,6 +51,10 @@ cd pte
 cd -
 fi
 
+if [ ! -d "openmp" ]; then
+git clone $CLONE_DEPTH https://github.com/hermitcore/openmp.git
+fi
+
 if [ ! -d "tmp/binutils" ]; then
 mkdir -p tmp/binutils
 cd tmp/binutils
@@ -92,16 +96,22 @@ cd tmp/gcc
 cd -
 fi
 
-# workaroud, compiler needs libgomp.spec to support OpenMP
-#install -m 644 hermit/usr/libomp/libgomp.spec $PREFIX/$TARGET/lib
+if [ ! -d "tmp/openmp" ]; then
+mkdir -p tmp/openmp
+cd tmp/openmp
+cmake -DLIBOMP_ARCH=$TARGET_SHORT -DCMAKE_C_COMPILER=$TARGET-gcc -DCMAKE_CXX_COMPILER=$TARGET-g++ -DCMAKE_INSTALL_PREFIX=$PREFIX/$TARGET -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY -DHERMIT=1 -DLIBOMP_ENABLE_SHARED=OFF -DLIBOMP_FORTRAN_MODULES=OFF -DLIBOMP_OMPT_SUPPORT=OFF -DOPENMP_ENABLE_LIBOMPTARGET=OFF ../../openmp
+make
+make install
+cd -
+fi
 
-#if [ ! -d "tmp/final" ]; then
-#mkdir -p tmp/final
-#cd tmp/final
-#cmake -DTOOLCHAIN_BIN_DIR=$PREFIX/bin -DCMAKE_INSTALL_PREFIX=$PREFIX -DMTUNE=native ../../hermit
-#make
-#make install
-#cd -
-#fi
+if [ ! -d "tmp/final" ]; then
+mkdir -p tmp/final
+cd tmp/final
+cmake -DTOOLCHAIN_BIN_DIR=$PREFIX/bin -DCMAKE_INSTALL_PREFIX=$PREFIX -DMTUNE=native ../../hermit
+make
+make install
+cd -
+fi
 
 cd ..

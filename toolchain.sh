@@ -37,7 +37,7 @@ mv isl-0.15 gcc/isl
 fi
 
 if [ ! -d "hermit" ]; then
-git clone --recursive -b devel https://github.com/hermitcore/libhermit.git hermit
+git clone --recursive https://github.com/hermitcore/libhermit.git hermit
 fi
 
 if [ ! -d "newlib" ]; then

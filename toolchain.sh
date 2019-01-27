@@ -56,7 +56,7 @@ fi
 if [ ! -d "tmp/gcc" ]; then
 mkdir -p tmp/gcc
 cd tmp/gcc
-../../gcc/configure --target=$TARGET --prefix=$PREFIX --with-isl --enable-default-pie --disable-multilib --without-headers --enable-languages=c --disable-nls --disable-shared --disable-libssp --disable-quadmath --disable-libatomic --disable-libmudflap --disable-libgomp && make all-gcc && make install-gcc
+../../gcc/configure --target=$TARGET --prefix=$PREFIX --with-isl --enable-default-pie --disable-multilib --without-headers --enable-languages=c,lto --enable-lto --disable-nls --disable-shared --disable-libssp --disable-quadmath --disable-libatomic --disable-libmudflap --disable-libgomp && make all-gcc && make install-gcc
 cd -
 fi
 
@@ -70,6 +70,6 @@ fi
 if [ ! -d "tmp/final" ]; then
 mkdir -p tmp/final
 cd tmp/final
-../../gcc/configure --target=$TARGET --prefix=$PREFIX --with-isl --enable-default-pie --disable-multilib --enable-languages=c,c++,fortran,go,lto --disable-nls --disable-shared --disable-libssp --disable-libatomic --disable-libmpx && make all && make install
+../../gcc/configure --target=$TARGET --prefix=$PREFIX --with-isl --enable-default-pie --disable-multilib --enable-languages=c,c++,fortran,lto --disable-nls --disable-shared --disable-libssp --disable-libatomic --disable-libmpx --disable-libsanitizer --enable-libgomp --enable-threads=posix --enable-tls --enable-lto && make all && make install
 cd -
 fi

@@ -38,7 +38,7 @@ build:
   stage: build
   script: |
     export PATH=/opt/hermit/bin:$PATH
-    export LD_LIBRARY_PATH=/opt/hermit/bin:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=/opt/hermit/lib:$LD_LIBRARY_PATH
     . cmake/local-cmake.sh
     ./toolchain.sh x86_64-hermit /opt/hermit
   image: ${IMAGE}

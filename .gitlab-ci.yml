@@ -1,6 +1,5 @@
 stages:
 - prepare
-- build
 
 variables:
   DOCKER_FILE: Dockerfile
@@ -30,15 +29,3 @@ variables:
 
 prepare:docker:
   <<: *prepare_docker
-
-# Stage: build
-##############################################################################
-
-build:
-  stage: build
-  script: |
-    export PATH=/opt/hermit/bin:$PATH
-    export LD_LIBRARY_PATH=/opt/hermit/lib:$LD_LIBRARY_PATH
-    . cmake/local-cmake.sh
-    ./toolchain.sh x86_64-hermit /opt/hermit
-  image: ${IMAGE}

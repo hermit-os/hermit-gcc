@@ -1,5 +1,7 @@
 FROM ubuntu:latest as builder
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 ADD . /hermit
 WORKDIR /hermit
 

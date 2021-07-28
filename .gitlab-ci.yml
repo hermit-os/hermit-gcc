@@ -6,6 +6,7 @@ variables:
   DOCKER_TAG: latest
   DOCKER_IMAGE: ${CI_REGISTRY_IMAGE}
   IMAGE: ${CI_REGISTRY_IMAGE}
+  FF_GITLAB_REGISTRY_HELPER_IMAGE: 1
 
 # Stage: prepare
 ##############################################################################

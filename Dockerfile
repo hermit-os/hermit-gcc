@@ -17,8 +17,10 @@ RUN ./toolchain.sh x86_64-hermit /opt/hermit
 FROM ubuntu:bionic
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV PATH=/opt/hermit/bin:$PATH
+ENV LD_LIBRARY_PATH=/opt/hermit/lib:$LD_LIBRARY_PATH
 
 # Update Software repository
-RUN apt-get clean && apt-get -qq update && apt-get install -y apt-transport-https vim curl wget git binutils autoconf automake make cmake nasm gcc g++ build-essential libtool bsdmainutils libssl-dev pkg-config lld libncurses5-dev python texinfo libmpfr-dev libmpc-dev libgmp-dev flex bison
+RUN apt-get clean && apt-get -qq update && apt-get install -y apt-transport-https vim curl wget git binutils autoconf automake make cmake nasm build-essential libssl lld libncurses5 libmpfr libmpc libgmp
 
 COPY --from=builder /opt/hermit /opt/hermit

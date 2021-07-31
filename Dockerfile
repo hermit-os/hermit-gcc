@@ -1,4 +1,4 @@
-FROM ubuntu:latest as builder
+FROM ubuntu:bionic as builder
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -14,7 +14,7 @@ RUN . cmake/local-cmake.sh
 RUN ./toolchain.sh x86_64-hermit /opt/hermit
 
 #Download base image ubuntu 18.04
-FROM ubuntu:latest
+FROM ubuntu:bionic
 
 ENV DEBIAN_FRONTEND=noninteractive
 

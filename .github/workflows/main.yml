@@ -22,4 +22,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: hermitcore/hermit-toolchain:ckernel
+          tags: ghcr.io/hermitcore/hermit-toolchain:ckernel

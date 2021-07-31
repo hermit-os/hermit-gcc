@@ -1,4 +1,4 @@
-name: Build docke rimage
+name: Build docker image
 on: [push]
 
 jobs:

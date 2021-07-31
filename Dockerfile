@@ -21,6 +21,6 @@ ENV PATH=/opt/hermit/bin:$PATH
 ENV LD_LIBRARY_PATH=/opt/hermit/lib:$LD_LIBRARY_PATH
 
 # Update Software repository
-RUN apt-get clean && apt-get -qq update && apt-get install -y apt-transport-https vim curl wget git binutils autoconf automake make cmake nasm build-essential libssl lld libncurses5 libmpfr libmpc libgmp
+RUN apt-get clean && apt-get -qq update && apt-get install -y apt-transport-https vim curl wget git binutils autoconf automake make cmake nasm build-essential lld libncurses5
 
 COPY --from=builder /opt/hermit /opt/hermit

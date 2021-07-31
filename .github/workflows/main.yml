@@ -1,9 +1,9 @@
+name: Build docke rimage
 on: [push]
 
 jobs:
   docker:
     runs-on: ubuntu-latest
-    name: Build docker image of the HermitCore's toolchain
     steps:
       - name: Checkout
         uses: actions/checkout@v2

@@ -5,6 +5,9 @@
 # $1 = specifies the target architecture
 # $2 = specifies the installation directory
 
+# exit when any command fails
+set -e
+
 BUILDDIR=build
 CLONE_DEPTH="--depth=50"
 PREFIX="$2"

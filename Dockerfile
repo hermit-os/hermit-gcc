@@ -1,4 +1,4 @@
-FROM ubuntu:bionic as builder
+FROM ubuntu:focal as builder
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -13,8 +13,8 @@ ENV LD_LIBRARY_PATH=/opt/hermit/lib:$LD_LIBRARY_PATH
 RUN . cmake/local-cmake.sh
 RUN ./toolchain.sh x86_64-hermit /opt/hermit
 
-#Download base image ubuntu 18.04
-FROM ubuntu:bionic
+#Download base image ubuntu 20.04
+FROM ubuntu:focal
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PATH=/opt/hermit/bin:$PATH

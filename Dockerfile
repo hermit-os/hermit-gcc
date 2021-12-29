@@ -28,7 +28,7 @@ ENV PATH=/opt/hermit/bin:/root/.cargo/bin:/root/.rustup/toolchains/nightly-x86_6
 ENV LD_LIBRARY_PATH=/opt/hermit/lib:$LD_LIBRARY_PATH
 
 # Update Software repository
-RUN apt-get clean && apt-get -qq update && apt-get install -y apt-transport-https vim curl wget git binutils autoconf automake make cmake nasm build-essential libssl-dev pkg-config lld libncurses5
+RUN apt-get clean && apt-get -qq update && apt-get install -y apt-transport-https vim curl wget git git-lfs binutils autoconf automake make cmake nasm build-essential libssl-dev pkg-config lld libncurses5
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
 RUN /root/.cargo/bin/cargo install cargo-download

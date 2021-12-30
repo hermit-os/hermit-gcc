@@ -14,12 +14,11 @@ PREFIX="$2"
 TARGET=$1
 NJOBS=-j"$(nproc)"
 PATH=$PATH:$PREFIX/bin
-ARCH_OPT="-mtune=native"
-export CFLAGS_FOR_TARGET="-m64 -O3 -ftree-vectorize $ARCH_OPT"
-export GOFLAGS_FOR_TARGET="-m64 -O3 -ftree-vectorize $ARCH_OPT"
-export FCFLAGS_FOR_TARGET="-m64 -O3 -ftree-vectorize $ARCH_OPT"
-export FFLAGS_FOR_TARGET="-m64 -O3 -ftree-vectorize $ARCH_OPT"
-export CXXFLAGS_FOR_TARGET="-m64 -O3 -ftree-vectorize $ARCH_OPT"
+export CFLAGS_FOR_TARGET="-m64 -O2 -ftree-vectorize"
+export GOFLAGS_FOR_TARGET="-m64 -O2 -ftree-vectorize"
+export FCFLAGS_FOR_TARGET="-m64 -O2 -ftree-vectorize"
+export FFLAGS_FOR_TARGET="-m64 -O2 -ftree-vectorize"
+export CXXFLAGS_FOR_TARGET="-m64 -O2 -ftree-vectorize"
 
 echo "Build bootstrap toolchain for $TARGET with $NJOBS jobs for $PREFIX"
 sleep 1

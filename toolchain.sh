@@ -15,12 +15,11 @@ TARGET=$1
 TARGET_SHORT=${TARGET::-7}
 NJOBS=-j"$(nproc)"
 PATH=$PATH:$PREFIX/bin
-ARCH_OPT= #"-mtune=native"
-export CFLAGS_FOR_TARGET="-O3 -ftree-vectorize $ARCH_OPT"
-export GOFLAGS_FOR_TARGET="-O3 -ftree-vectorize $ARCH_OPT"
-export FCFLAGS_FOR_TARGET="-O3 -ftree-vectorize $ARCH_OPT"
-export FFLAGS_FOR_TARGET="-O3 -ftree-vectorize $ARCH_OPT"
-export CXXFLAGS_FOR_TARGET="-O3 -ftree-vectorize $ARCH_OPT"
+export CFLAGS_FOR_TARGET="-O3"
+export GOFLAGS_FOR_TARGET="-O3"
+export FCFLAGS_FOR_TARGET="-O3"
+export FFLAGS_FOR_TARGET="-O3"
+export CXXFLAGS_FOR_TARGET="-O3"
 
 echo "Build bootstrap toolchain for $TARGET with $NJOBS jobs for $PREFIX"
 sleep 1
@@ -61,7 +60,7 @@ fi
 if [ ! -d "tmp/binutils" ]; then
 mkdir -p tmp/binutils
 cd tmp/binutils
-../../binutils/configure --target=$TARGET --prefix=$PREFIX --with-sysroot --disable-multilib --disable-shared --disable-nls --disable-gdb --disable-libdecnumber --disable-readline --disable-sim --disable-libssp --enable-tls --enable-lto --enable-plugin
+../../binutils/configure --target=$TARGET --prefix=$PREFIX --with-sysroot --disable-multilib --disable-shared --disable-nls --disable-gdb --disable-libdecnumber --disable-readline --disable-sim --enable-tls --enable-lto --enable-plugin
 make $NJOBS
 make install
 cd -
@@ -99,7 +98,7 @@ cd ..
 if [ ! -d "tmp/gcc" ]; then
 mkdir -p tmp/gcc
 cd tmp/gcc
-../../gcc/configure --target=$TARGET --prefix=$PREFIX --with-newlib --with-isl --disable-multilib --without-libatomic --enable-languages=c,c++,fortran,go,lto --disable-nls --disable-shared --disable-libssp --enable-threads=posix --disable-libgomp --enable-tls --enable-lto --disable-symver
+../../gcc/configure --target=$TARGET --prefix=$PREFIX --with-newlib --with-isl --disable-multilib --without-libatomic --enable-languages=c,c++,fortran,go,lto --disable-nls --disable-shared --enable-libssp --enable-threads=posix --disable-libgomp --enable-tls --enable-lto --disable-symver
 make $NJOBS
 make install
 cd -
@@ -117,7 +116,7 @@ fi
 if [ ! -d "tmp/final" ]; then
 mkdir -p tmp/final
 cd tmp/final
-cmake -DTOOLCHAIN_BIN_DIR=$PREFIX/bin -DCMAKE_INSTALL_PREFIX=$PREFIX -DMTUNE=native ../../hermit
+cmake -DTOOLCHAIN_BIN_DIR=$PREFIX/bin -DCMAKE_INSTALL_PREFIX=$PREFIX ../../hermit
 make
 make install
 cd -

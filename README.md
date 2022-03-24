@@ -25,4 +25,4 @@ $ ./toolchain.sh x86_64-hermit /home/usr/hermit
 ```
 
 The first argument of the script specifies the target architecture, where the second argument defines the path to the installation directory.
-Do create the toolchain, write access to the installation directory is required.
+To create the toolchain, write access to the installation directory is required.

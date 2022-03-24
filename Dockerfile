@@ -1,38 +1,42 @@
-FROM ubuntu:focal as builder
+FROM rust:buster as builder
 
-ENV DEBIAN_FRONTEND=noninteractive
+RUN set -eux; \
+    cargo install cargo-binutils; \
+    cargo install cargo-download;
 
-ADD . /hermit
-WORKDIR /hermit
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        # gcc Build-Depends:
+        bison \
+        flex \
+        libgmp-dev \
+        libmpc-dev \
+        libmpfr-dev \
+        texinfo \
+        # libhermit-rs Build-Depends:
+        cmake \
+        nasm \
+    ; \
+    rm -rf /var/lib/apt/lists/*;
 
-# Update and install required packets from ubuntu repository
-RUN apt-get clean && apt-get -qq update && apt-get install -y apt-transport-https curl wget git binutils autoconf automake make cmake nasm gcc g++ build-essential libtool bsdmainutils libssl-dev pkg-config lld libncurses5-dev python texinfo libmpfr-dev libmpc-dev libgmp-dev flex bison
-
-# Install Rust toolchain
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
-RUN /root/.cargo/bin/cargo install cargo-download
-RUN /root/.cargo/bin/cargo install cargo-binutils
-RUN /root/.cargo/bin/rustup component add rust-src
-RUN /root/.cargo/bin/rustup component add llvm-tools-preview
-
-ENV PATH=/opt/hermit/bin:/root/.cargo/bin:/root/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/:$PATH
-ENV LD_LIBRARY_PATH=/opt/hermit/lib:$LD_LIBRARY_PATH
+ADD ./toolchain.sh .
 RUN ./toolchain.sh x86_64-hermit /opt/hermit
 
-#Download base image ubuntu 20.04
-FROM ubuntu:focal
 
-ENV DEBIAN_FRONTEND=noninteractive
-ENV PATH=/opt/hermit/bin:/root/.cargo/bin:/root/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/:$PATH
-ENV LD_LIBRARY_PATH=/opt/hermit/lib:$LD_LIBRARY_PATH
+FROM rust:buster as toolchain
 
-# Update Software repository
-RUN apt-get clean && apt-get -qq update && apt-get install -y apt-transport-https vim curl wget git git-lfs binutils autoconf automake make cmake nasm build-essential libssl-dev pkg-config lld libncurses5
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        # libhermit-rs Build-Depends:
+        cmake \
+        nasm \
+    ; \
+    rm -rf /var/lib/apt/lists/*;
 
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
-RUN /root/.cargo/bin/cargo install cargo-download
-RUN /root/.cargo/bin/cargo install cargo-binutils
-RUN /root/.cargo/bin/rustup component add rust-src
-RUN /root/.cargo/bin/rustup component add llvm-tools-preview
-
+COPY --from=builder $CARGO_HOME/bin/rust-objcopy $CARGO_HOME/bin/rust-objcopy
+COPY --from=builder $CARGO_HOME/bin/cargo-download $CARGO_HOME/bin/cargo-download
 COPY --from=builder /opt/hermit /opt/hermit
+ENV PATH=/opt/hermit/bin:$PATH \
+    LD_LIBRARY_PATH=/opt/hermit/lib:$LD_LIBRARY_PATH

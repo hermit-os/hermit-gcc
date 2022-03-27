@@ -31,7 +31,7 @@ git clone $CLONE_DEPTH https://github.com/hermitcore/binutils.git
 fi
 
 if [ ! -d "gcc" ]; then
-git clone $CLONE_DEPTH -b path2rs https://github.com/hermitcore/gcc.git
+git clone $CLONE_DEPTH -b releases/gcc-6.5.0 https://github.com/hermitcore/gcc.git
 wget ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-0.15.tar.bz2 -O isl-0.15.tar.bz2
 tar jxf isl-0.15.tar.bz2
 mv isl-0.15 gcc/isl

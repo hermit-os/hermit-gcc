@@ -27,7 +27,7 @@ mkdir -p $BUILDDIR
 cd $BUILDDIR
 
 if [ ! -d "binutils" ]; then
-git clone $CLONE_DEPTH https://github.com/hermitcore/binutils.git
+git clone $CLONE_DEPTH -b binutils-2_38 https://github.com/hermitcore/binutils.git
 fi
 
 if [ ! -d "gcc" ]; then

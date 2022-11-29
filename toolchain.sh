@@ -23,7 +23,6 @@ export FFLAGS_FOR_TARGET="-m64 -O3"
 export CXXFLAGS_FOR_TARGET="-m64 -O3"
 
 echo "Build bootstrap toolchain for $TARGET with $NJOBS jobs for $PREFIX"
-sleep 1
 
 mkdir -p $BUILDDIR
 cd $BUILDDIR

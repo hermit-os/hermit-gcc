@@ -17,12 +17,14 @@ RUN set -eux; \
     ; \
     rm -rf /var/lib/apt/lists/*;
 
+WORKDIR /root/
 ADD ./toolchain.sh .
 RUN ./toolchain.sh x86_64-hermit /opt/hermit
 
 
 FROM rust:buster as toolchain
 
+WORKDIR /root/
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \

@@ -146,7 +146,7 @@ cd tmp/gcc
     --with-isl \
     --disable-multilib \
     --without-libatomic \
-    --enable-languages=c,c++,fortran,lto \
+    --enable-languages=c,c++,go,fortran,lto \
     --disable-nls \
     --disable-shared \
     --enable-libssp \

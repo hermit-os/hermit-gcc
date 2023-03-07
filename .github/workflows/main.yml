@@ -27,6 +27,7 @@ jobs:
         with:
           context: .
           target: toolchain
+          no-cache: true
           push: true
           tags: |
             ghcr.io/hermitcore/hermit-toolchain:rskernel

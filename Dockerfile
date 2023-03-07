@@ -5,6 +5,7 @@ RUN set -eux; \
     apt-get install -y --no-install-recommends \
         # gcc Build-Depends:
         bison \
+        git \
         flex \
         libgmp-dev \
         libmpc-dev \

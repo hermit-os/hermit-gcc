@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - gcc-6.5.0
   schedule:
     - cron: '30 5 * * 6'
 
@@ -30,5 +31,4 @@ jobs:
           no-cache: true
           push: true
           tags: |
-            ghcr.io/hermitcore/hermit-toolchain:rskernel
-            ghcr.io/hermitcore/hermit-toolchain:latest
+            ghcr.io/hermitcore/hermit-toolchain:gcc-6.5.0

@@ -124,7 +124,6 @@ cd tmp/newlib
     --disable-shared \
     --disable-multilib \
     --enable-lto \
-    --enable-newlib-hw-fp \
     --enable-newlib-io-c99-formats \
     --enable-newlib-multithread
 make -O $NJOBS

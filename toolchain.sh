@@ -97,7 +97,6 @@ cd tmp/bootstrap
     --enable-threads=posix \
     --enable-tls \
     --enable-lto \
-    --enable-default-pie \
     --disable-symvers
 make -O $NJOBS all-gcc
 make install-gcc
@@ -154,7 +153,6 @@ cd tmp/gcc
     --enable-libgomp \
     --enable-tls \
     --enable-lto \
-    --enable-default-pie \
     --disable-symver
 make -O $NJOBS
 make install

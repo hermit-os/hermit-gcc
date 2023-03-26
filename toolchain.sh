@@ -165,7 +165,8 @@ cd tmp/final
 cmake ../../hermit \
     -DTOOLCHAIN_BIN_DIR=$PREFIX/bin \
     -DCMAKE_INSTALL_PREFIX=$PREFIX \
-    -DMTUNE=native 
+    -DMTUNE=native \
+    -DCMAKE_BUILD_TYPE=Release
 make
 make install
 cd -

@@ -9,11 +9,11 @@ The build process works currently only on **x86-based Linux** systems. The follo
 * Netwide Assembler (NASM)
 * GNU Make, GNU Binutils, cmake
 * Tools and libraries to build *linux*, *binutils* and *gcc* (e.g. flex, bison, MPFR library, GMP library, MPC library)
-* texinfo
+* Rust
 
 On Debian-based systems the packets can be installed by executing:
 ```
-  sudo apt-get install cmake nasm texinfo libmpfr-dev libmpc-dev libgmp-dev flex bison
+  sudo apt-get install cmake nasm libmpfr-dev libmpc-dev libgmp-dev flex bison
 ```
 
 ## Building the HermitCore's toolchain

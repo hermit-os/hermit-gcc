@@ -16,6 +16,8 @@ On Debian-based systems the packets can be installed by executing:
   sudo apt-get install cmake nasm libmpfr-dev libmpc-dev libgmp-dev flex bison
 ```
 
+Note: If issues arise during the build, try using requirements.sh to check the versions of the necessary packets and the configuration of the LD_LIBRARY_PATH (it should contain the MPFR library, GMP library and MPC library).
+
 ## Building the HermitCore's toolchain
 
 To build the toolchain just call the script as follow:

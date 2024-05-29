@@ -1,8 +1,6 @@
 name: Build docker image
 on:
   push:
-    branches:
-      - master
 
 jobs:
   docker:
@@ -26,7 +24,7 @@ jobs:
           context: .
           target: toolchain
           no-cache: true
-          push: true
+          push: false
           tags: |
             ghcr.io/hermitcore/hermit-toolchain:rskernel
             ghcr.io/hermitcore/hermit-toolchain:latest

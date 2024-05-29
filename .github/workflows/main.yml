@@ -18,7 +18,7 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: hermitcore
+          username: hermit-os
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push
         uses: docker/build-push-action@v2
@@ -28,5 +28,5 @@ jobs:
           no-cache: true
           push: true
           tags: |
-            ghcr.io/hermitcore/hermit-toolchain:rskernel
-            ghcr.io/hermitcore/hermit-toolchain:latest
+            ghcr.io/hermit-os/hermit-toolchain:rskernel
+            ghcr.io/hermit-os/hermit-toolchain:latest

@@ -28,30 +28,30 @@ mkdir -p $BUILDDIR
 cd $BUILDDIR
 
 if [ ! -d "binutils" ]; then
-git clone $CLONE_DEPTH https://github.com/hermitcore/binutils.git
+git clone $CLONE_DEPTH https://github.com/hermit-os/binutils.git
 fi
 
 if [ ! -d "gcc" ]; then
-git clone $CLONE_DEPTH https://github.com/hermitcore/gcc.git
+git clone $CLONE_DEPTH https://github.com/hermit-os/gcc.git
 wget ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-0.15.tar.bz2 -O isl-0.15.tar.bz2
 tar jxf isl-0.15.tar.bz2
 mv isl-0.15 gcc/isl
 fi
 
 if [ ! -d "hermit" ]; then
-git clone --recursive -b master https://github.com/hermitcore/hermit-playground hermit
+git clone --recursive -b master https://github.com/hermit-os/hermit-playground hermit
 pushd hermit/librs
-# See https://github.com/hermitcore/libhermit-rs/issues/597
+# See https://github.com/hermit-os/libhermit-rs/issues/597
 cargo update --package time --precise 0.3.11
 popd
 fi
 
 if [ ! -d "newlib" ]; then
-git clone $CLONE_DEPTH -b path2rs https://github.com/hermitcore/newlib.git
+git clone $CLONE_DEPTH -b path2rs https://github.com/hermit-os/newlib.git
 fi
 
 if [ ! -d "pte" ]; then
-git clone $CLONE_DEPTH -b path2rs https://github.com/hermitcore/pthread-embedded.git pte
+git clone $CLONE_DEPTH -b path2rs https://github.com/hermit-os/pthread-embedded.git pte
 cd pte
 ./configure --target=$TARGET --prefix=$PREFIX
 cd -

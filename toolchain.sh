@@ -110,8 +110,8 @@ cmake ../../hermit/ \
     -DTOOLCHAIN_BIN_DIR=$PREFIX/bin \
     -DCMAKE_INSTALL_PREFIX=$PREFIX \
     -DBOOTSTRAP=true 
-make hermit-bootstrap
-make hermit-bootstrap-install
+make hermit
+make hermit_rs-install
 cd -
 fi
 

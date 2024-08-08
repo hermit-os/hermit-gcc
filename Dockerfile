@@ -1,4 +1,4 @@
-FROM rust:buster as builder
+FROM rust:bookworm AS builder
 
 RUN set -eux; \
     apt-get update; \
@@ -22,7 +22,7 @@ ADD ./toolchain.sh /root/toolchain.sh
 RUN ./toolchain.sh x86_64-hermit /opt/hermit
 
 
-FROM rust:buster as toolchain
+FROM rust:bookworm AS toolchain
 
 RUN set -eux; \
     apt-get update; \

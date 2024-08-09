@@ -1,4 +1,14 @@
-FROM rust:bookworm AS builder
+FROM --platform=$BUILDPLATFORM rust:bookworm AS kernel
+ADD --link https://github.com/hermit-os/kernel.git /kernel
+WORKDIR /kernel
+RUN cargo xtask build \
+    --artifact-dir . \
+    --arch x86_64 \
+    --release \
+    --no-default-features \
+    --features pci,smp,acpi,newlib,tcp,dhcpv4
+
+FROM buildpack-deps:bookworm AS builder
 
 RUN set -eux; \
     apt-get update; \
@@ -14,6 +24,9 @@ RUN set -eux; \
     rm -rf /var/lib/apt/lists/*;
 
 WORKDIR /root
+
+COPY --link --from=kernel /kernel/libhermit.a /root/kernel/libhermit.a
+ENV LDFLAGS_FOR_TARGET="-L/root/kernel -lhermit"
 
 ADD --link https://github.com/hermit-os/binutils.git binutils
 ADD --link https://github.com/hermit-os/gcc.git gcc

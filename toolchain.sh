@@ -68,15 +68,6 @@ make install-gcc
 cd -
 fi
 
-cd kernel
-cargo xtask build \
-    --arch x86_64 \
-    --release \
-    --no-default-features \
-    --features pci,smp,acpi,newlib,tcp,dhcpv4
-export LDFLAGS_FOR_TARGET="-L$PWD/target/x86_64/release -lhermit"
-cd -
-
 if [ ! -d "tmp/newlib" ]; then
 mkdir -p tmp/newlib
 cd tmp/newlib

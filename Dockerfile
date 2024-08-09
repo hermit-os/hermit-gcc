@@ -1,3 +1,6 @@
+ARG TARGET=x86_64-hermit
+ARG PREFIX=/opt/hermit
+
 FROM --platform=$BUILDPLATFORM rust:bookworm AS kernel
 ADD --link https://github.com/hermit-os/kernel.git /kernel
 WORKDIR /kernel
@@ -35,10 +38,13 @@ ADD --link https://github.com/hermit-os/newlib.git newlib
 ADD --link https://github.com/hermit-os/pthread-embedded.git pte
 ADD --link ./toolchain.sh ./toolchain.sh
 
-RUN ./toolchain.sh x86_64-hermit /opt/hermit
+ARG TARGET
+ARG PREFIX
+RUN ./toolchain.sh $TARGET $PREFIX
 
 
 FROM rust:bookworm AS toolchain
-COPY --from=builder /opt/hermit /opt/hermit
-ENV PATH=/opt/hermit/bin:$PATH \
-    LD_LIBRARY_PATH=/opt/hermit/lib:$LD_LIBRARY_PATH
+ARG PREFIX
+COPY --from=builder $PREFIX $PREFIX
+ENV PATH=$PREFIX/bin:$PATH \
+    LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH

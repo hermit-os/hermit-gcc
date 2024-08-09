@@ -8,8 +8,6 @@
 # exit when any command fails
 set -e
 
-BUILDDIR=build
-CLONE_DEPTH="--depth=50"
 PREFIX="$2"
 TARGET=$1
 NJOBS=-j"$(nproc)"
@@ -23,29 +21,6 @@ export FFLAGS_FOR_TARGET="-fPIE -pie"
 export CXXFLAGS_FOR_TARGET="-fPIE -pie"
 
 echo "Build bootstrap toolchain for $TARGET with $NJOBS jobs for $PREFIX"
-
-mkdir -p $BUILDDIR
-cd $BUILDDIR
-
-if [ ! -d "binutils" ]; then
-git clone $CLONE_DEPTH https://github.com/hermit-os/binutils.git
-fi
-
-if [ ! -d "gcc" ]; then
-git clone $CLONE_DEPTH https://github.com/hermit-os/gcc.git
-fi
-
-if [ ! -d "kernel" ]; then
-git clone https://github.com/hermit-os/kernel
-fi
-
-if [ ! -d "newlib" ]; then
-git clone $CLONE_DEPTH -b path2rs https://github.com/hermit-os/newlib.git
-fi
-
-if [ ! -d "pte" ]; then
-git clone $CLONE_DEPTH -b path2rs https://github.com/hermit-os/pthread-embedded.git pte
-fi
 
 if [ ! -d "tmp/binutils" ]; then
 mkdir -p tmp/binutils
@@ -149,5 +124,3 @@ make -O $NJOBS
 make install
 cd -
 fi
-
-cd ..

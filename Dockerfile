@@ -4,7 +4,6 @@ RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
         bison \
-        git \
         flex \
         libgmp-dev \
         libisl-dev \
@@ -14,8 +13,15 @@ RUN set -eux; \
     ; \
     rm -rf /var/lib/apt/lists/*;
 
-WORKDIR /root/
-ADD ./toolchain.sh /root/toolchain.sh
+WORKDIR /root
+
+ADD --link https://github.com/hermit-os/binutils.git binutils
+ADD --link https://github.com/hermit-os/gcc.git gcc
+ADD --link https://github.com/hermit-os/kernel.git kernel
+ADD --link https://github.com/hermit-os/newlib.git newlib
+ADD --link https://github.com/hermit-os/pthread-embedded.git pte
+ADD --link ./toolchain.sh ./toolchain.sh
+
 RUN ./toolchain.sh x86_64-hermit /opt/hermit
 
 

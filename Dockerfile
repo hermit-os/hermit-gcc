@@ -8,6 +8,7 @@ RUN set -eux; \
         git \
         flex \
         libgmp-dev \
+        libisl-dev \
         libmpc-dev \
         libmpfr-dev \
         texinfo \

@@ -1,9 +1,11 @@
 #!/bin/bash
 
-if echo "$LD_LIBRARY_PATH" | grep -q libgmp && echo "$LD_LIBRARY_PATH" | grep -q libmpc && echo "$LD_LIBRARY_PATH" | grep -q libmpfr; then
-    echo "LD_LIBRARY_PATH contains MPFR library, GMP library and MPC library"
+if echo "$LD_LIBRARY_PATH" | grep -q libgmp && echo "$LD_LIBRARY_PATH" | grep -q libisl && echo "$LD_LIBRARY_PATH" | grep -q libmpc && echo "$LD_LIBRARY_PATH" | grep -q libmpfr; then
+    echo "LD_LIBRARY_PATH contains MPFR library, ISL library, GMP library, and MPC library"
 elif ! echo "$LD_LIBRARY_PATH" | grep -q libgmp; then
     echo "LD_LIBRARY_PATH missing GMP library"
+elif ! echo "$LD_LIBRARY_PATH" | grep -q libisl; then
+    echo "LD_LIBRARY_PATH missing ISL library"
 elif ! echo "$LD_LIBRARY_PATH" | grep -q libmpc; then
     echo "LD_LIBRARY_PATH missing MPC library"
 elif ! echo "$LD_LIBRARY_PATH" | grep -q libmpfr; then

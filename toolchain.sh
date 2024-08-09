@@ -22,29 +22,6 @@ export CXXFLAGS_FOR_TARGET="-fPIE -pie"
 
 echo "Build bootstrap toolchain for $TARGET with $NJOBS jobs for $PREFIX"
 
-if [ ! -d "tmp/binutils" ]; then
-mkdir -p tmp/binutils
-cd tmp/binutils
-../../binutils/configure \
-    --target=$TARGET \
-    --prefix=$PREFIX \
-    --with-sysroot \
-    --disable-werror \
-    --disable-multilib \
-    --disable-shared \
-    --disable-nls \
-    --disable-gdb \
-    --disable-libdecnumber \
-    --disable-readline \
-    --disable-sim \
-    --enable-tls \
-    --enable-lto \
-    --enable-plugin
-make -O $NJOBS
-make install
-cd -
-fi
-
 if [ ! -d "tmp/bootstrap" ]; then
 mkdir -p tmp/bootstrap
 cd tmp/bootstrap

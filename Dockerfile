@@ -11,6 +11,40 @@ RUN cargo xtask build \
     --no-default-features \
     --features pci,smp,acpi,newlib,tcp,dhcpv4
 
+FROM buildpack-deps:bookworm AS binutils
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        bison \
+        flex \
+        texinfo \
+    ; \
+    rm -rf /var/lib/apt/lists/*;
+ADD --link https://github.com/hermit-os/binutils.git /binutils
+WORKDIR /binutils
+ENV CFLAGS="-w" \
+    CXXFLAGS="-w"
+ARG TARGET
+ARG PREFIX
+RUN set -eux; \
+    ./configure \
+        --target=$TARGET \
+        --prefix=$PREFIX \
+        --with-sysroot \
+        --disable-werror \
+        --disable-multilib \
+        --disable-shared \
+        --disable-nls \
+        --disable-gdb \
+        --disable-libdecnumber \
+        --disable-readline \
+        --disable-sim \
+        --enable-tls \
+        --enable-lto \
+        --enable-plugin; \
+    make -O -j$(nproc); \
+    make install
+
 FROM buildpack-deps:bookworm AS builder
 
 RUN set -eux; \
@@ -31,7 +65,8 @@ WORKDIR /root
 COPY --link --from=kernel /kernel/libhermit.a /root/kernel/libhermit.a
 ENV LDFLAGS_FOR_TARGET="-L/root/kernel -lhermit"
 
-ADD --link https://github.com/hermit-os/binutils.git binutils
+ARG PREFIX
+COPY --link --from=binutils $PREFIX $PREFIX
 ADD --link https://github.com/hermit-os/gcc.git gcc
 ADD --link https://github.com/hermit-os/kernel.git kernel
 ADD --link https://github.com/hermit-os/newlib.git newlib
@@ -39,7 +74,6 @@ ADD --link https://github.com/hermit-os/pthread-embedded.git pte
 ADD --link ./toolchain.sh ./toolchain.sh
 
 ARG TARGET
-ARG PREFIX
 RUN ./toolchain.sh $TARGET $PREFIX
 
 

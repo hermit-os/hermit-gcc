@@ -45,8 +45,7 @@ RUN set -eux; \
     make -O -j$(nproc); \
     make install
 
-FROM buildpack-deps:bookworm AS builder
-
+FROM buildpack-deps:bookworm AS gcc
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
@@ -59,26 +58,88 @@ RUN set -eux; \
         texinfo \
     ; \
     rm -rf /var/lib/apt/lists/*;
-
-WORKDIR /root
-
-COPY --link --from=kernel /kernel/libhermit.a /root/kernel/libhermit.a
-ENV LDFLAGS_FOR_TARGET="-L/root/kernel -lhermit"
-
+ARG TARGET
 ARG PREFIX
 COPY --link --from=binutils $PREFIX $PREFIX
-ADD --link https://github.com/hermit-os/gcc.git gcc
-ADD --link https://github.com/hermit-os/kernel.git kernel
-ADD --link https://github.com/hermit-os/newlib.git newlib
-ADD --link https://github.com/hermit-os/pthread-embedded.git pte
-ADD --link ./toolchain.sh ./toolchain.sh
+ENV CFLAGS="-w" \
+    CXXFLAGS="-w" \
+    CFLAGS_FOR_TARGET="-fPIE -pie" \
+    GOFLAGS_FOR_TARGET="-fPIE -pie" \
+    FCFLAGS_FOR_TARGET="-fPIE -pie" \
+    FFLAGS_FOR_TARGET="-fPIE -pie" \
+    CXXFLAGS_FOR_TARGET="-fPIE -pie"
 
-ARG TARGET
-RUN ./toolchain.sh $TARGET $PREFIX
+ADD --link https://github.com/hermit-os/gcc.git /gcc
+WORKDIR /gcc/builddir-bootstrap
+RUN set -eux; \
+    ../configure \
+        --target=$TARGET \
+        --prefix=$PREFIX \
+        --without-headers \
+        --disable-multilib \
+        --with-isl \
+        --enable-languages=c,c++,lto \
+        --disable-nls \
+        --disable-shared \
+        --disable-libssp \
+        --disable-libgomp \
+        --enable-threads=posix \
+        --enable-tls \
+        --enable-lto \
+        --disable-symvers; \
+    make -O -j$(nproc) all-gcc; \
+    make install-gcc
+ENV PATH=$PREFIX/bin:$PATH
 
+COPY --link --from=kernel /kernel/libhermit.a /kernel/libhermit.a
+ENV LDFLAGS_FOR_TARGET="-L/kernel -lhermit"
+
+ADD --link https://github.com/hermit-os/newlib.git /newlib
+WORKDIR /newlib
+RUN set -eux; \
+    ./configure \
+        --target=$TARGET \
+        --prefix=$PREFIX \
+        --disable-shared \
+        --disable-multilib \
+        --enable-lto \
+        --enable-newlib-io-c99-formats \
+        --enable-newlib-multithread; \
+    make -O -j$(nproc); \
+    make install
+
+ADD --link https://github.com/hermit-os/pthread-embedded.git /pthread-embedded
+WORKDIR /pthread-embedded
+RUN set -eux; \
+    ./configure \
+        --target=$TARGET \
+        --prefix=$PREFIX; \
+    make -O -j$(nproc); \
+    make install
+
+WORKDIR /gcc/builddir
+RUN set -eux; \
+    ../configure \
+        --target=$TARGET \
+        --prefix=$PREFIX \
+        --with-newlib \
+        --with-isl \
+        --disable-multilib \
+        --without-libatomic \
+        --enable-languages=c,c++,fortran,lto \
+        --disable-nls \
+        --disable-shared \
+        --enable-libssp \
+        --enable-threads=posix \
+        --enable-libgomp \
+        --enable-tls \
+        --enable-lto \
+        --disable-symver; \
+    make -O -j$(nproc); \
+    make install
 
 FROM rust:bookworm AS toolchain
 ARG PREFIX
-COPY --from=builder $PREFIX $PREFIX
+COPY --from=gcc $PREFIX $PREFIX
 ENV PATH=$PREFIX/bin:$PATH \
     LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH

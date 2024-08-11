@@ -16,11 +16,11 @@ NJOBS=-j"$(nproc)"
 PATH=$PATH:$PREFIX/bin
 export CFLAGS="-w"
 export CXXFLAGS="-w"
-export CFLAGS_FOR_TARGET="-m64 -O3 -fPIE"
-export GOFLAGS_FOR_TARGET="-m64 -O3 -fPIE"
-export FCFLAGS_FOR_TARGET="-m64 -O3 -fPIE"
-export FFLAGS_FOR_TARGET="-m64 -O3 -fPIE"
-export CXXFLAGS_FOR_TARGET="-m64 -O3 -fPIE"
+export CFLAGS_FOR_TARGET="-fPIE"
+export GOFLAGS_FOR_TARGET="-fPIE"
+export FCFLAGS_FOR_TARGET="-fPIE"
+export FFLAGS_FOR_TARGET="-fPIE"
+export CXXFLAGS_FOR_TARGET="-fPIE"
 
 echo "Build bootstrap toolchain for $TARGET with $NJOBS jobs for $PREFIX"
 

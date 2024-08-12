@@ -132,7 +132,8 @@ cd pte
 ./configure \
     --target=$TARGET \
     --prefix=$PREFIX
-make && make install
+make -O $NJOBS
+make install
 cd ..
 
 if [ ! -d "tmp/gcc" ]; then

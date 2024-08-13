@@ -33,9 +33,6 @@ fi
 
 if [ ! -d "gcc" ]; then
 git clone $CLONE_DEPTH https://github.com/hermit-os/gcc.git
-wget ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-0.15.tar.bz2 -O isl-0.15.tar.bz2
-tar jxf isl-0.15.tar.bz2
-mv isl-0.15 gcc/isl
 fi
 
 if [ ! -d "hermit" ]; then

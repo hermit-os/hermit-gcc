@@ -45,9 +45,6 @@ fi
 
 if [ ! -d "pte" ]; then
 git clone $CLONE_DEPTH -b path2rs https://github.com/hermit-os/pthread-embedded.git pte
-cd pte
-./configure --target=$TARGET --prefix=$PREFIX
-cd -
 fi
 
 if [ ! -d "tmp/binutils" ]; then
@@ -125,7 +122,11 @@ cd -
 fi
 
 cd pte
-make && make install
+./configure \
+    --target=$TARGET \
+    --prefix=$PREFIX
+make -O $NJOBS
+make install
 cd ..
 
 if [ ! -d "tmp/gcc" ]; then

@@ -37,10 +37,6 @@ fi
 
 if [ ! -d "hermit" ]; then
 git clone --recursive -b master https://github.com/hermit-os/hermit-playground hermit
-pushd hermit/librs
-# See https://github.com/hermit-os/libhermit-rs/issues/597
-cargo update --package time --precise 0.3.11
-popd
 fi
 
 if [ ! -d "newlib" ]; then

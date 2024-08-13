@@ -39,6 +39,10 @@ if [ ! -d "hermit" ]; then
 git clone --recursive -b master https://github.com/hermit-os/hermit-playground hermit
 fi
 
+if [ ! -d "kernel" ]; then
+git clone https://github.com/hermit-os/kernel
+fi
+
 if [ ! -d "newlib" ]; then
 git clone $CLONE_DEPTH -b path2rs https://github.com/hermit-os/newlib.git
 fi
@@ -93,17 +97,16 @@ make install-gcc
 cd -
 fi
 
-if [ ! -d "tmp/hermit" ]; then
-mkdir -p tmp/hermit
-cd tmp/hermit
-cmake ../../hermit/ \
-    -DTOOLCHAIN_BIN_DIR=$PREFIX/bin \
-    -DCMAKE_INSTALL_PREFIX=$PREFIX \
-    -DBOOTSTRAP=true 
-make hermit
-make hermit_rs-install
+cp -r hermit/include $PREFIX/x86_64-hermit
+
+cd kernel
+cargo xtask build \
+    --arch x86_64 \
+    --release \
+    --no-default-features \
+    --features pci,smp,acpi,newlib,tcp,dhcpv4
+cp target/x86_64/release/libhermit.a $PREFIX/x86_64-hermit/lib
 cd -
-fi
 
 if [ ! -d "tmp/newlib" ]; then
 mkdir -p tmp/newlib
@@ -149,19 +152,6 @@ cd tmp/gcc
     --enable-lto \
     --disable-symver
 make -O $NJOBS
-make install
-cd -
-fi
-
-if [ ! -d "tmp/final" ]; then
-mkdir -p tmp/final
-cd tmp/final
-cmake ../../hermit \
-    -DTOOLCHAIN_BIN_DIR=$PREFIX/bin \
-    -DCMAKE_INSTALL_PREFIX=$PREFIX \
-    -DMTUNE=native \
-    -DCMAKE_BUILD_TYPE=Release
-make
 make install
 cd -
 fi

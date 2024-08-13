@@ -43,7 +43,8 @@ RUN set -eux; \
         --enable-lto \
         --enable-plugin; \
     make -O -j$(nproc); \
-    make install
+    make install; \
+    make clean
 
 FROM buildpack-deps:bookworm AS gcc
 RUN set -eux; \
@@ -88,7 +89,8 @@ RUN set -eux; \
         --enable-lto \
         --disable-symvers; \
     make -O -j$(nproc) all-gcc; \
-    make install-gcc
+    make install-gcc; \
+    make clean
 ENV PATH=$PREFIX/bin:$PATH
 
 COPY --link --from=kernel /kernel/libhermit.a /kernel/libhermit.a
@@ -106,7 +108,8 @@ RUN set -eux; \
         --enable-newlib-io-c99-formats \
         --enable-newlib-multithread; \
     make -O -j$(nproc); \
-    make install
+    make install; \
+    make clean
 
 ADD --link https://github.com/hermit-os/pthread-embedded.git /pthread-embedded
 WORKDIR /pthread-embedded
@@ -115,7 +118,8 @@ RUN set -eux; \
         --target=$TARGET \
         --prefix=$PREFIX; \
     make -O -j$(nproc); \
-    make install
+    make install; \
+    make clean
 
 WORKDIR /gcc/builddir
 RUN set -eux; \
@@ -136,7 +140,8 @@ RUN set -eux; \
         --enable-lto \
         --disable-symver; \
     make -O -j$(nproc); \
-    make install
+    make install; \
+    make clean
 
 FROM rust:bookworm AS toolchain
 ARG PREFIX

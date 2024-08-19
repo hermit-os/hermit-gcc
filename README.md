@@ -1,4 +1,4 @@
-# hermit-toolchain
+# hermit-gcc
 
 This repository contains scripts to build the cross-compiler for the Rust-based library OS [HermitCore](https://github.com/hermit-os/libhermit-rs).
 

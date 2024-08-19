@@ -23,4 +23,4 @@ jobs:
       - uses: docker/build-push-action@v5
         with:
           push: ${{ github.ref_name == 'main' }}
-          tags: ghcr.io/hermit-os/hermit-toolchain:latest
+          tags: ghcr.io/hermit-os/hermit-gcc:latest

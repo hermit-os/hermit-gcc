@@ -35,10 +35,6 @@ if [ ! -d "gcc" ]; then
 git clone $CLONE_DEPTH https://github.com/hermit-os/gcc.git
 fi
 
-if [ ! -d "hermit" ]; then
-git clone --recursive -b master https://github.com/hermit-os/hermit-playground hermit
-fi
-
 if [ ! -d "kernel" ]; then
 git clone https://github.com/hermit-os/kernel
 fi
@@ -97,15 +93,13 @@ make install-gcc
 cd -
 fi
 
-cp -r hermit/include $PREFIX/x86_64-hermit
-
 cd kernel
 cargo xtask build \
     --arch x86_64 \
     --release \
     --no-default-features \
     --features pci,smp,acpi,newlib,tcp,dhcpv4
-cp target/x86_64/release/libhermit.a $PREFIX/x86_64-hermit/lib
+export LDFLAGS_FOR_TARGET="-L$PWD/target/x86_64/release -lhermit"
 cd -
 
 if [ ! -d "tmp/newlib" ]; then

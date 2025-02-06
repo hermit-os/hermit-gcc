@@ -94,7 +94,7 @@ RUN set -eux; \
 ENV PATH=$PREFIX/bin:$PATH
 
 COPY --link --from=kernel /kernel/libhermit.a /kernel/libhermit.a
-ENV LDFLAGS_FOR_TARGET="-L/kernel -lhermit"
+ENV LDFLAGS_FOR_TARGET="-L/kernel -Wl,--whole-archive -lhermit -Wl,--no-whole-archive"
 
 ADD --link https://github.com/hermit-os/newlib.git /newlib
 WORKDIR /newlib

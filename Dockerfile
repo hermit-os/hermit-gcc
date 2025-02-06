@@ -106,6 +106,7 @@ RUN set -eux; \
         --disable-multilib \
         --enable-lto \
         --enable-newlib-io-c99-formats \
+        --enable-newlib-mb \
         --enable-newlib-multithread; \
     make -O -j$(nproc); \
     make install; \

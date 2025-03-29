@@ -20,8 +20,9 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v6
+      - uses: docker/bake-action@v6
         with:
-          build-args: ARCH=x86_64
           push: ${{ github.ref_name == 'main' }}
-          tags: ghcr.io/hermit-os/hermit-gcc:x86_64
+          targets: hermit-gcc-x86_64
+          set: |
+            *.tags=ghcr.io/hermit-os/hermit-gcc:x86_64

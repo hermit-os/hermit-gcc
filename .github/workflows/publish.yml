@@ -22,5 +22,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v6
         with:
+          build-args: ARCH=x86_64
           push: ${{ github.ref_name == 'main' }}
           tags: ghcr.io/hermit-os/hermit-gcc:latest

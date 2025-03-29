@@ -1,12 +1,14 @@
-ARG TARGET=x86_64-hermit
+ARG ARCH
+ARG TARGET=$ARCH-hermit
 ARG PREFIX=/opt/hermit
 
 FROM --platform=$BUILDPLATFORM rust:bookworm AS kernel
 ADD --link https://github.com/hermit-os/kernel.git /kernel
 WORKDIR /kernel
+ARG ARCH
 RUN cargo xtask build \
     --artifact-dir . \
-    --arch x86_64 \
+    --arch $ARCH \
     --release \
     --no-default-features \
     --features pci,smp,acpi,newlib,tcp,dhcpv4

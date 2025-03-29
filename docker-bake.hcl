@@ -2,7 +2,7 @@ target "docker-metadata-action" {}
 
 target "hermit-gcc" {
   matrix = {
-    arch = ["x86_64"]
+    arch = ["aarch64", "x86_64"]
   }
   inherits = ["docker-metadata-action"]
   name = "hermit-gcc-${arch}"

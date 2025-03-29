@@ -10,6 +10,9 @@ on:
 
 jobs:
   docker:
+    strategy:
+      matrix:
+        arch: [aarch64, x86_64]
     name: Build and push Docker image
     runs-on: ubuntu-latest
     steps:
@@ -23,6 +26,6 @@ jobs:
       - uses: docker/bake-action@v6
         with:
           push: ${{ github.ref_name == 'main' }}
-          targets: hermit-gcc-x86_64
+          targets: hermit-gcc-${{ matrix.arch }}
           set: |
-            *.tags=ghcr.io/hermit-os/hermit-gcc:x86_64
+            *.tags=ghcr.io/hermit-os/hermit-gcc:${{ matrix.arch }}

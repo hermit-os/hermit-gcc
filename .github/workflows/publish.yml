@@ -9,14 +9,19 @@ on:
   merge_group:
 
 jobs:
-  docker:
+  build:
     strategy:
       matrix:
         platform: [linux/amd64, linux/arm64]
         target_arch: [aarch64, riscv64, x86_64]
-    name: Build and push Docker image
     runs-on: ${{ matrix.platform == 'linux/arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
     steps:
+      - name: Prepare
+        run: |
+          platform=${{ matrix.platform }}
+          target_arch=${{ matrix.target_arch }}
+          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+          echo "BAKE_TARGET=hermit-gcc-${target_arch}" >> $GITHUB_ENV
       - uses: docker/setup-buildx-action@v3
       - uses: docker/login-action@v3
         if: github.ref_name == 'main'
@@ -25,8 +30,50 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/bake-action@v6
+        id: bake
         with:
-          push: ${{ github.ref_name == 'main' }}
-          targets: hermit-gcc-${{ matrix.target_arch }}
+          targets: ${{ env.BAKE_TARGET }}
           set: |
-            *.tags=ghcr.io/hermit-os/hermit-gcc:${{ matrix.target_arch }}
+            *.tags=ghcr.io/hermit-os/hermit-gcc
+            *.output=type=image,push-by-digest=${{ github.ref_name == 'main' && 'true' || 'false' }},name-canonical=true,push=${{ github.ref_name == 'main' && 'true' || 'false' }}
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests-${{ matrix.target_arch }}
+          digest="${{ fromJSON(steps.bake.outputs.metadata)[env.BAKE_TARGET]['containerimage.digest'] }}"
+          touch "${{ runner.temp }}/digests-${{ matrix.target_arch }}/${digest#sha256:}"
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ env.PLATFORM_PAIR }}-${{ matrix.target_arch }}
+          path: ${{ runner.temp }}/digests-${{ matrix.target_arch }}/*
+          if-no-files-found: error
+          retention-days: 1
+  
+  merge:
+    if: github.ref_name == 'main'
+    strategy:
+      matrix:
+        target_arch: [aarch64, riscv64, x86_64]
+    runs-on: ubuntu-24.04
+    needs: build
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests-${{ matrix.target_arch }}
+          pattern: digests-*-${{ matrix.target_arch }}
+          merge-multiple: true
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create manifest list and push
+        working-directory: ${{ runner.temp }}/digests-${{ matrix.target_arch }}
+        run: |
+          docker buildx imagetools create -t ghcr.io/hermit-os/hermit-gcc:${{ matrix.target_arch }} \
+            $(printf 'ghcr.io/hermit-os/hermit-gcc@sha256:%s ' *)
+      - name: Inspect image
+        run: |
+          docker buildx imagetools inspect ghcr.io/hermit-os/hermit-gcc:${{ matrix.target_arch }}

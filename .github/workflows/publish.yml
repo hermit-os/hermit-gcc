@@ -12,9 +12,10 @@ jobs:
   docker:
     strategy:
       matrix:
-        arch: [aarch64, riscv64, x86_64]
+        platform: [linux/amd64, linux/arm64]
+        target_arch: [aarch64, riscv64, x86_64]
     name: Build and push Docker image
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.platform == 'linux/arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
     steps:
       - uses: docker/setup-buildx-action@v3
       - uses: docker/login-action@v3
@@ -26,6 +27,6 @@ jobs:
       - uses: docker/bake-action@v6
         with:
           push: ${{ github.ref_name == 'main' }}
-          targets: hermit-gcc-${{ matrix.arch }}
+          targets: hermit-gcc-${{ matrix.target_arch }}
           set: |
-            *.tags=ghcr.io/hermit-os/hermit-gcc:${{ matrix.arch }}
+            *.tags=ghcr.io/hermit-os/hermit-gcc:${{ matrix.target_arch }}

@@ -21,7 +21,7 @@ You can then compile applications like this (adapt to your desired target archit
 [Hermit kernel]: https://github.com/hermit-os/kernel
 
 ```bash
-docker run --rm -v .:/mnt -w /mnt ghcr.io/hermit-os/hermit-gcc:x86_64 x86_64-hermit-gcc -o app app.c libhermit.a
+docker run --rm -v .:/mnt -w /mnt ghcr.io/hermit-os/hermit-gcc:x86_64 x86_64-hermit-gcc -o app app.c -Wl,--whole-archive libhermit.a -fPIE -pie
 ```
 
 You can also use the image interactively:

@@ -15,13 +15,10 @@ This repository provides an OCI image ([`ghcr.io/hermit-os/hermit-gcc`], [`Docke
 
 ## Usage
 
-To compile Hermit applications using this image, you need a built [Hermit kernel] (`libhermit.a`).
-You can then compile applications like this (adapt to your desired target architecture):
-
-[Hermit kernel]: https://github.com/hermit-os/kernel
+You can use this image to run the compiler in the current directory using Docker:
 
 ```bash
-docker run --rm -v .:/mnt -w /mnt ghcr.io/hermit-os/hermit-gcc:x86_64 x86_64-hermit-gcc -o app app.c libhermit.a
+docker run --rm -v .:/mnt -w /mnt ghcr.io/hermit-os/hermit-gcc:x86_64 x86_64-hermit-gcc --version
 ```
 
 You can also use the image interactively:
@@ -29,3 +26,5 @@ You can also use the image interactively:
 ```bash
 docker run --rm -it -v .:/mnt -w /mnt ghcr.io/hermit-os/hermit-gcc:x86_64
 ```
+
+For details on compiling C code for Hermit, see [hermit-c](https://github.com/hermit-os/hermit-c).

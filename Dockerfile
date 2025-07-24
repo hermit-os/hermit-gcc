@@ -132,7 +132,7 @@ RUN set -eux; \
         --with-newlib \
         --with-isl \
         --disable-multilib \
-        --without-libatomic \
+        --with-libatomic \
         --enable-languages=c,c++,fortran,lto \
         --disable-nls \
         --disable-shared \

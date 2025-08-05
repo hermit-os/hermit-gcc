@@ -11,7 +11,7 @@ RUN cargo xtask build \
     --arch $ARCH \
     --release \
     --no-default-features \
-    --features acpi,dhcpv4,newlib,pci,smp,tcp
+    --features acpi,dhcpv4,mman,newlib,pci,smp,tcp
 
 FROM buildpack-deps:bookworm AS binutils
 RUN set -eux; \

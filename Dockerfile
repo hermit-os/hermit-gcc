@@ -33,6 +33,7 @@ RUN set -eux; \
         --target=$TARGET \
         --prefix=$PREFIX \
         --with-sysroot \
+        --enable-default-execstack=no \
         --disable-werror \
         --disable-multilib \
         --disable-shared \

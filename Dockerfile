@@ -144,7 +144,13 @@ RUN set -eux; \
     make clean
 
 FROM rust:bookworm AS toolchain
+ARG TARGET
 ARG PREFIX
 COPY --from=gcc $PREFIX $PREFIX
 ENV PATH=$PREFIX/bin:$PATH \
-    LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH
+    LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH \
+    AR=$TARGET-ar \
+    CC=$TARGET-gcc \
+    CXX=$TARGET-g++ \
+    LD=$TARGET-ld \
+    RANLIB=$TARGET-ranlib

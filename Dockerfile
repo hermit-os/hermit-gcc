@@ -72,7 +72,7 @@ ENV CFLAGS="-w" \
     FFLAGS_FOR_TARGET="-fPIE -pie" \
     CXXFLAGS_FOR_TARGET="-fPIE -pie"
 
-ADD --link https://github.com/hermit-os/gcc.git /gcc
+RUN git clone --depth 1 --branch go https://github.com/hermit-os/gcc.git /gcc
 WORKDIR /gcc/builddir-bootstrap
 RUN set -eux; \
     ../configure \
@@ -132,8 +132,8 @@ RUN set -eux; \
         --with-newlib \
         --with-isl \
         --disable-multilib \
-        --with-libatomic \
-        --enable-languages=c,c++,fortran,lto \
+        --without-libatomic \
+        --enable-languages=c,c++,go,fortran,lto \
         --disable-nls \
         --disable-shared \
         --enable-libssp \

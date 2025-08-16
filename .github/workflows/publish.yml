@@ -3,7 +3,7 @@ name: Publish
 on:
   push:
     branches:
-      - main
+      - go
   workflow_dispatch:
   pull_request:
   merge_group:
@@ -12,8 +12,8 @@ jobs:
   build:
     strategy:
       matrix:
-        platform: [linux/amd64, linux/arm64]
-        target_arch: [aarch64, riscv64, x86_64]
+        platform: [linux/amd64]
+        target_arch: [x86_64]
     runs-on: ${{ matrix.platform == 'linux/arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
     steps:
       - name: Prepare
@@ -50,10 +50,10 @@ jobs:
           retention-days: 1
   
   merge:
-    if: github.ref_name == 'main'
+    if: github.ref_name == 'go'
     strategy:
       matrix:
-        target_arch: [aarch64, riscv64, x86_64]
+        target_arch: [x86_64]
     runs-on: ubuntu-24.04
     needs: build
     steps:
@@ -72,8 +72,8 @@ jobs:
       - name: Create manifest list and push
         working-directory: ${{ runner.temp }}/digests-${{ matrix.target_arch }}
         run: |
-          docker buildx imagetools create -t ghcr.io/hermit-os/hermit-gcc:${{ matrix.target_arch }} \
+          docker buildx imagetools create -t ghcr.io/hermit-os/hermit-gcc:go_${{ matrix.target_arch }} \
             $(printf 'ghcr.io/hermit-os/hermit-gcc@sha256:%s ' *)
       - name: Inspect image
         run: |
-          docker buildx imagetools inspect ghcr.io/hermit-os/hermit-gcc:${{ matrix.target_arch }}
+          docker buildx imagetools inspect ghcr.io/hermit-os/hermit-gcc:go_${{ matrix.target_arch }}

@@ -66,12 +66,7 @@ ARG TARGET
 ARG PREFIX
 COPY --link --from=binutils $PREFIX $PREFIX
 ENV CFLAGS="-w" \
-    CXXFLAGS="-w" \
-    CFLAGS_FOR_TARGET="-fPIE -pie" \
-    GOFLAGS_FOR_TARGET="-fPIE -pie" \
-    FCFLAGS_FOR_TARGET="-fPIE -pie" \
-    FFLAGS_FOR_TARGET="-fPIE -pie" \
-    CXXFLAGS_FOR_TARGET="-fPIE -pie"
+    CXXFLAGS="-w"
 
 RUN git clone --depth 1 --branch go https://github.com/hermit-os/gcc.git /gcc
 WORKDIR /gcc/builddir-bootstrap
@@ -87,6 +82,7 @@ RUN set -eux; \
         --disable-shared \
         --disable-libssp \
         --disable-libgomp \
+        --enable-default-pie \
         --enable-threads=posix \
         --enable-tls \
         --enable-lto \
@@ -137,6 +133,7 @@ RUN set -eux; \
         --enable-languages=c,c++,go,fortran,lto \
         --disable-nls \
         --disable-shared \
+        --enable-default-pie \
         --enable-libssp \
         --enable-threads=posix \
         --enable-libgomp \

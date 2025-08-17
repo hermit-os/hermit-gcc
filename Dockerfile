@@ -33,6 +33,7 @@ RUN set -eux; \
         --target=$TARGET \
         --prefix=$PREFIX \
         --with-sysroot \
+        --enable-default-execstack=no \
         --disable-werror \
         --disable-multilib \
         --disable-shared \
@@ -65,12 +66,7 @@ ARG TARGET
 ARG PREFIX
 COPY --link --from=binutils $PREFIX $PREFIX
 ENV CFLAGS="-w" \
-    CXXFLAGS="-w" \
-    CFLAGS_FOR_TARGET="-fPIE -pie" \
-    GOFLAGS_FOR_TARGET="-fPIE -pie" \
-    FCFLAGS_FOR_TARGET="-fPIE -pie" \
-    FFLAGS_FOR_TARGET="-fPIE -pie" \
-    CXXFLAGS_FOR_TARGET="-fPIE -pie"
+    CXXFLAGS="-w"
 
 RUN git clone --depth 1 --branch go https://github.com/hermit-os/gcc.git /gcc
 WORKDIR /gcc/builddir-bootstrap

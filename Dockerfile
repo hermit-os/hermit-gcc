@@ -86,6 +86,7 @@ RUN set -eux; \
         --disable-shared \
         --disable-libssp \
         --disable-libgomp \
+        --enable-default-pie \
         --enable-threads=posix \
         --enable-tls \
         --enable-lto \
@@ -136,6 +137,7 @@ RUN set -eux; \
         --enable-languages=c,c++,go,fortran,lto \
         --disable-nls \
         --disable-shared \
+        --enable-default-pie \
         --enable-libssp \
         --enable-threads=posix \
         --enable-libgomp \

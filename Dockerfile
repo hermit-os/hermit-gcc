@@ -3,7 +3,7 @@ ARG TARGET=$ARCH-hermit
 ARG PREFIX=/opt/hermit
 
 FROM --platform=$BUILDPLATFORM rust:bookworm AS kernel
-ADD --link https://github.com/hermit-os/kernel.git /kernel
+COPY --link src/kernel /kernel
 WORKDIR /kernel
 ARG ARCH
 RUN cargo xtask build \
@@ -22,7 +22,7 @@ RUN set -eux; \
         texinfo \
     ; \
     rm -rf /var/lib/apt/lists/*;
-ADD --link https://github.com/hermit-os/binutils.git /binutils
+COPY --link src/binutils /binutils
 WORKDIR /binutils
 ENV CFLAGS="-w" \
     CXXFLAGS="-w"
@@ -68,7 +68,7 @@ COPY --link --from=binutils $PREFIX $PREFIX
 ENV CFLAGS="-w" \
     CXXFLAGS="-w"
 
-ADD --link https://github.com/hermit-os/gcc.git /gcc
+COPY --link src/gcc /gcc
 WORKDIR /gcc/builddir-bootstrap
 RUN set -eux; \
     ../configure \
@@ -95,7 +95,7 @@ ENV PATH=$PREFIX/bin:$PATH
 COPY --link --from=kernel /kernel/libhermit.a /kernel/libhermit.a
 ENV LDFLAGS_FOR_TARGET="-L/kernel"
 
-ADD --link https://github.com/hermit-os/newlib.git /newlib
+COPY --link src/newlib /newlib
 WORKDIR /newlib
 RUN set -eux; \
     ./configure \
@@ -111,7 +111,7 @@ RUN set -eux; \
     make install; \
     make clean
 
-ADD --link https://github.com/hermit-os/pthread-embedded.git /pthread-embedded
+COPY --link src/pthread-embedded /pthread-embedded
 WORKDIR /pthread-embedded
 RUN set -eux; \
     ./configure \

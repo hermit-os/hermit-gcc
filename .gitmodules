@@ -1,0 +1,15 @@
+[submodule "src/kernel"]
+	path = src/kernel
+	url = https://github.com/hermit-os/kernel.git
+[submodule "src/binutils"]
+	path = src/binutils
+	url = https://github.com/hermit-os/binutils.git
+[submodule "src/gcc"]
+	path = src/gcc
+	url = https://github.com/hermit-os/gcc.git
+[submodule "src/newlib"]
+	path = src/newlib
+	url = https://github.com/hermit-os/newlib.git
+[submodule "src/pthread-embedded"]
+	path = src/pthread-embedded
+	url = https://github.com/hermit-os/pthread-embedded.git

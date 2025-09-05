@@ -130,7 +130,7 @@ RUN set -eux; \
         --with-isl \
         --disable-multilib \
         --with-libatomic \
-        --enable-languages=c,c++,fortran,lto \
+        --enable-languages=c,c++,fortran,go,lto \
         --disable-nls \
         --disable-shared \
         --enable-default-pie \

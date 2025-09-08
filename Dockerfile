@@ -140,7 +140,7 @@ RUN set -eux; \
         --enable-tls \
         --enable-lto \
         --disable-symver; \
-    make -O -j$(nproc); \
+    make -O -j$(nproc) || (tail -v -n +1 $TARGET/*/config.log && false); \
     make install; \
     make clean
 

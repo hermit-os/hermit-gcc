@@ -37,12 +37,14 @@ jobs:
             *.tags=ghcr.io/hermit-os/hermit-gcc
             *.output=type=image,push-by-digest=${{ github.ref_name == 'main' && 'true' || 'false' }},name-canonical=true,push=${{ github.ref_name == 'main' && 'true' || 'false' }}
       - name: Export digest
+        if: github.ref_name == 'main'
         run: |
           mkdir -p ${{ runner.temp }}/digests-${{ matrix.target_arch }}
           digest="${{ fromJSON(steps.bake.outputs.metadata)[env.BAKE_TARGET]['containerimage.digest'] }}"
           touch "${{ runner.temp }}/digests-${{ matrix.target_arch }}/${digest#sha256:}"
       - name: Upload digest
         uses: actions/upload-artifact@v4
+        if: github.ref_name == 'main'
         with:
           name: digests-${{ env.PLATFORM_PAIR }}-${{ matrix.target_arch }}
           path: ${{ runner.temp }}/digests-${{ matrix.target_arch }}/*

@@ -2,7 +2,7 @@ ARG ARCH
 ARG TARGET=$ARCH-hermit
 ARG PREFIX=/opt/hermit
 
-FROM --platform=$BUILDPLATFORM rust:bookworm AS kernel
+FROM --platform=$BUILDPLATFORM rust:trixie AS kernel
 COPY --link src/kernel /kernel
 WORKDIR /kernel
 ARG ARCH
@@ -13,7 +13,7 @@ RUN cargo xtask build \
     --no-default-features \
     --features acpi,dhcpv4,mman,newlib,pci,smp,tcp
 
-FROM buildpack-deps:bookworm AS binutils
+FROM buildpack-deps:trixie AS binutils
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
@@ -49,7 +49,7 @@ RUN set -eux; \
     make install; \
     make clean
 
-FROM buildpack-deps:bookworm AS gcc
+FROM buildpack-deps:trixie AS gcc
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
@@ -144,7 +144,7 @@ RUN set -eux; \
     make install; \
     make clean
 
-FROM rust:bookworm AS toolchain
+FROM rust:trixie AS toolchain
 ARG RUST_TARGET
 ARG TARGET
 ARG PREFIX

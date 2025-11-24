@@ -11,7 +11,7 @@ RUN cargo xtask build \
     --arch $ARCH \
     --release \
     --no-default-features \
-    --features acpi,dhcpv4,mman,newlib,pci,smp,tcp
+    --features acpi,dhcpv4,dns,mman,newlib,pci,smp,tcp,udp,virtio-net,warn-prebuilt
 
 FROM buildpack-deps:trixie AS binutils
 RUN set -eux; \
@@ -149,6 +149,7 @@ ARG RUST_TARGET
 ARG TARGET
 ARG PREFIX
 COPY --link --from=gcc $PREFIX $PREFIX
+COPY --link --from=kernel /kernel/libhermit.a $PREFIX/$TARGET/lib/
 ENV PATH=$PREFIX/bin:$PATH \
     LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH \
     AR_${RUST_TARGET//-/_}=$TARGET-ar \
